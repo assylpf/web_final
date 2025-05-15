@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Practice | ProgHUB</title>
+  <style>
+    :root {
+      --bg-color: #1e1e1e;
+      --text-color: #f0f0f0;
+      --header-bg: #1b1b1b;
+      --highlight-color: #ffd369;
+      --section-bg: #2a2a2a;
+      --input-bg: #333;
+      --list-bg: #3a3a3a;
+      --list-hover: #495057;
+      --button-bg: #22c55e;
+      --button-hover: #16a34a;
+      --link-color: #d1d1d1;
+      --heading-color: #ffb347;
+      --active-bg: #22c55e;
+      --active-text: #ffffff;
+      --code-bg: #2d2d2d;
+      --code-border: #444;
+      --success-color: #4ade80;
+      --warning-color: #fbbf24;
+      --danger-color: #f87171;
+    }
+
+    body.light-mode {
+      --bg-color: #f8f9fa;
+      --text-color: #1e1e1e;
+      --highlight-color: #000000;
+      --section-bg: #ffffff;
+      --input-bg: #ffffff;
+      --list-bg: #f0f8ff;
+      --list-hover: #d4f4e5;
+      --button-bg: #059669;
+      --button-hover: #047857;
+      --link-color: #333;
+      --heading-color: #000000;
+      --active-bg: #059669;
+      --active-text: #ffffff;
+      --code-bg: #e7e7e7;
+      --code-border: #444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Tahoma, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: var(--header-bg);
+      color: #facc15;
+      padding: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 10px;
+    }
+
+    .mode-btn {
+      padding: 10px 20px;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .mode-btn:hover {
+      background-color: #555;
+    }
+
+    .mode-btn.active {
+      background-color: var(--active-bg);
+      font-weight: bold;
+    }
+
+    .main-wrapper {
+      display: flex;
+      flex: 1;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 290px;
+      background-color: var(--section-bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header,
+    .mode-toggle-footer {
+      flex-shrink: 0;
+    }
+
+    .sidebar-scroll {
+      flex-grow: 1;
+      overflow-y: auto;
+      scrollbar-width: auto;
+      scrollbar-color: #888 transparent;
+    }
+
+    .sidebar h3 {
+      color: var(--highlight-color);
+      margin: 20px;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      background: #444;
+      border-radius: 5px;
+      overflow: hidden;
+      height: 8px;
+      width: 200px;
+      margin: 0 0 25px 20px;
+    }
+
+    .progress {
+      width: 95%;
+      background: var(--button-bg);
+      height: 100%;
+      transition: width 0.3s;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0 20px;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar {
+      width: 18px;
+      background-color: transparent;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background-color: #5a5a5a;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    .topic-button {
+      background: var(--list-bg);
+      color: var(--text-color);
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      margin: 6px 0;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      transition: background-color 0.3s ease;
+    }
+
+    .topic-button:hover {
+      background-color: var(--list-hover);
+    }
+
+
+    .topic-button.active {
+      background-color: var(--active-bg);
+      color: var(--active-text);
+      font-weight: 600;
+    }
+
+    .topic-button .icon {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .mode-toggle-footer {
+      padding: 14px 20px;
+      background-color: var(--section-bg);
+      border-top: 1px solid var(--code-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: var(--text-color);
+    }
+
+    .toggle-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toggle-switch {
+      width: 36px;
+      height: 20px;
+      background-color: var(--code-border);
+      border-radius: 20px;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-switch::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    body.light-mode .toggle-switch {
+      background-color: #888;
+    }
+
+    body.light-mode .toggle-switch::before {
+      left: 18px;
+    }
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      scrollbar-width: auto;
+      scrollbar-color: #888 transparent;
+    }
+
+    .practice-container {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      color: var(--heading-color);
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .task-description {
+      background-color: var(--section-bg);
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .task-description p {
+      margin-bottom: 15px;
+    }
+
+    .task-description ul, .task-description ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    .code-editor-container {
+      margin-bottom: 25px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .code-editor-title {
+      font-weight: 600;
+      color: var(--highlight-color);
+    }
+
+    .code-editor {
+      flex: 1;
+      background-color: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 6px;
+      padding: 15px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-color);
+      resize: none;
+      min-height: 200px;
+      margin-bottom: 15px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--button-bg);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--button-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--section-bg);
+      color: var(--text-color);
+      border: 1px solid var(--code-border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--list-hover);
+    }
+
+    .output-container {
+      margin-top: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .output-title {
+      font-weight: 600;
+      color: var(--highlight-color);
+    }
+
+    .output-content {
+      flex: 1;
+      background-color: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 6px;
+      padding: 15px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-color);
+      min-height: 100px;
+      overflow-y: auto;
+    }
+
+    .hint-container {
+      margin-top: 20px;
+      background-color: var(--section-bg);
+      border-left: 4px solid var(--warning-color);
+      padding: 15px;
+      border-radius: 0 6px 6px 0;
+      display: none;
+    }
+
+    .hint-title {
+      font-weight: 600;
+      color: var(--warning-color);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--code-border);
+    }
+
+    .status-indicator {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .status-unsolved {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .status-solved {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .main-wrapper {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+      }
+      
+      .practice-container {
+        padding: 15px;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>ProgHUB</div>
+    <div class="mode-toggle" style="flex-grow: 1; display: flex; justify-content: center; gap: 10px;">
+      <button id="lecture-btn" class="mode-btn active" onclick="switchMode('lecture')">Lecture</button>
+      <button id="practice-btn" class="mode-btn" onclick="switchMode('practice')">Practice</button>
+    </div>
+  </div>
+
+  <div class="main-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3 onclick="location.href = 'mainPageProject.html'">Course "JavaScript" <br>for beginners</h3>
+        <div class="progress-bar">
+          <div class="progress"></div>
+        </div>
+      </div>
+      <div class="sidebar-scroll">
+        <ul>
+         <li><strong>1. Introduction</strong></li>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=1.1'">1.1 About the course</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=1.2'">1.2 About JavaScript</button>
+          <li><strong>2. JavaScript Basics</strong></li>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=2.1'">2.1 Instructions and comments</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=2.2'">2.2 Variables</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=2.3'">2.3 Data types</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=2.4'">2.4 Input</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=2.5'">2.5 Mathematical operations</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=2.6'">2.6 Comparison operators</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=2.7'">2.7 Logical operators</button>
+
+          <li><strong>3. Conditional constructions</strong></li>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=3.1'">3.1 if</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=3.2'">3.2 else and else if</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=3.3'">3.3 Ternary operator</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=3.4'">3.4 Nested conditions</button>
+
+          <li><strong>4. Loops</strong></li>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=4.1'">4.1 for</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=4.2'">4.2 while</button>
+
+          <li><strong>5. Functions</strong></li>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=5.1'">5.1 Introduction to functions</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=5.2'">5.2 Parameters</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=5.3'">5.3 Return value</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=5.4'">5.4 Arrow functions, functional expressions</button>
+
+          <li><strong>6. Objects</strong></li>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=6.1'">6.1 Introduction to objects</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=6.2'">6.2 Working with properties</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=6.3'">6.3 Methods of object</button>
+
+          <li><strong>7. Working with primitives</strong></li>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=7.1'">7.1 Interpolation and special characters</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=7.2'">7.2 Properties and methods of strings</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=7.3'">7.3 Row indices</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=7.4'">7.4 Working with numbers, Math</button>
+
+          <li><strong>8. Arrays</strong></li>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=8.1'">8.1 Introduction to arrays</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=8.2'">8.2 slice, concat, split/join</button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=8.3'">8.3 map, filter, includes</button>
+        </ul>
+      </div>
+      <div class="mode-toggle-footer">
+        <div class="toggle-left">
+          <span id="modeIcon">🌙</span>
+          <span id="modeText">Dark Mode</span>
+        </div>
+        <div class="toggle-switch" onclick="toggleMode()"></div>
+      </div>
+    </aside>
+    </aside>
+
+    <main>
+      <div class="practice-container">
+        <h1 id="practice-title">Practice: Loading...</h1>
+        
+        <div class="task-description" id="task-description">
+          <p>Loading practice content...</p>
+        </div>
+
+        <div class="code-editor-container">
+          <div class="code-editor-header">
+            <div class="code-editor-title">Your Code</div>
+            <div class="status-indicator status-unsolved">Unsolved</div>
+          </div>
+          <textarea class="code-editor" id="codeEditor">// Write your solution here</textarea>
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="runCode()">Run Code</button>
+            <button class="btn btn-secondary" onclick="showHint()">Show Hint</button>
+            <button class="btn btn-secondary" onclick="showSolution()">Show Solution</button>
+            <button class="btn btn-secondary" onclick="resetCode()">Reset</button>
+          </div>
+        </div>
+
+        <div class="hint-container" id="hintContainer">
+          <div class="hint-title">
+            <span>💡 Hint</span>
+          </div>
+          <div id="hint-content"></div>
+        </div>
+
+        <div class="output-container">
+          <div class="output-header">
+            <div class="output-title">Output</div>
+          </div>
+          <div class="output-content" id="outputContent">
+            Your output will appear here...
+          </div>
+        </div>
+
+        <div class="navigation-buttons">
+          <button class="btn btn-secondary" onclick="prevPractice()">← Previous</button>
+          <button class="btn btn-primary" onclick="nextPractice()">Next →</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- External Scripts -->
+  <script src="practiceTexts.js"></script>
+  <script src="theme.js"></script>
+  <script>
+    // Current practice state
+    let currentPractice = '';
+    let solvedPractices = ['1.1', '1.2', '2.1', '2.2'];
+    let practiceData = {};
+
+    // Initialize the page
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const topic = urlParams.get('topic') || '1.1';
+      
+      // Установите правильное состояние кнопок в зависимости от текущей страницы
+      const isPracticePage = window.location.pathname.includes('practice');
+      document.getElementById('lecture-btn').classList.toggle('active', !isPracticePage);
+      document.getElementById('practice-btn').classList.toggle('active', isPracticePage);
+      
+      loadPracticeData().then(() => {
+        loadPractice(topic);
+      });
+    });
+
+    // Mock function to load practice data
+    async function loadPracticeData() {
+      // In a real implementation, this would fetch from practiceTexts.js
+      practiceData = {
+        '1.1': {
+          title: "About the Course",
+          description: `<p>Welcome to the JavaScript practice course. This first exercise will help you get familiar with the practice environment.</p>
+                        <p><strong>Task:</strong> Write a simple JavaScript statement that outputs "Hello, ProgHUB!" to the console.</p>`,
+          hint: `<p>Use the <code>console.log()</code> function to output text to the console.</p>
+                <p>Remember to put your text in quotes (either single or double).</p>`,
+          solution: 'console.log("Hello, ProgHUB!");',
+          test: (code) => {
+            const output = captureOutput(code);
+            return output.includes("Hello, ProgHUB!");
+          }
+        },
+        '1.2': {
+          title: "About JavaScript",
+          description: `<p>Let's practice some basic JavaScript syntax.</p>
+                        <p><strong>Task:</strong> Create a variable called <code>message</code> containing the text "JavaScript is fun!" and then log it to the console.</p>`,
+          hint: `<p>Use the <code>let</code> or <code>const</code> keyword to declare a variable.</p>
+                <p>Remember to use the equals sign (=) to assign a value.</p>`,
+          solution: 'const message = "JavaScript is fun!";\nconsole.log(message);',
+          test: (code) => {
+            const output = captureOutput(code);
+            return output.includes("JavaScript is fun!");
+          }
+        },
+        '2.1': {
+          title: "Instructions and Comments",
+          description: `<p>Practice writing JavaScript instructions and comments.</p>
+                        <p><strong>Task:</strong> Write three lines of code:</p>
+                        <ol>
+                          <li>A comment explaining what the code does</li>
+                          <li>A variable declaration</li>
+                          <li>A console.log statement</li>
+                        </ol>`,
+          hint: `<p>Comments start with // for single-line or /* */ for multi-line</p>
+                <p>Variable declarations use let, const, or var</p>`,
+          solution: '// This code demonstrates basic syntax\nlet example = "Hello";\nconsole.log(example);',
+          test: (code) => {
+            return code.includes('//') || code.includes('/*') && 
+                   (code.includes('let') || code.includes('const') || code.includes('var')) && 
+                   code.includes('console.log');
+          }
+        },
+        '2.2': {
+          title: "Variables Practice",
+          description: `<p>Practice working with JavaScript variables.</p>
+                        <p><strong>Task:</strong> Create three variables:</p>
+                        <ol>
+                          <li>A string variable with your name</li>
+                          <li>A number variable with your age</li>
+                          <li>A boolean variable indicating if you're a student</li>
+                        </ol>
+                        <p>Then log these values to the console.</p>`,
+          hint: `<p>Remember different data types use different syntax:</p>
+                <ul>
+                  <li>Strings use quotes</li>
+                  <li>Numbers don't use quotes</li>
+                  <li>Booleans are true or false (no quotes)</li>
+                </ul>`,
+          solution: 'const name = "Alice";\nconst age = 25;\nconst isStudent = true;\nconsole.log(name, age, isStudent);',
+          test: (code) => {
+            const output = captureOutput(code);
+            return output.includes('"') && // Check for string
+                   output.match(/\d+/) && // Check for number
+                   (output.includes('true') || output.includes('false')); // Check for boolean
+          }
+        }
+        // More practice items would be added here for all topics
+      };
+    }
+
+    // Function to load practice content
+    function loadPractice(practiceId) {
+      currentPractice = practiceId;
+      const practice = practiceData[practiceId];
+      
+      if (!practice) {
+        document.getElementById('practice-title').textContent = 'Practice Not Found';
+        document.getElementById('task-description').innerHTML = '<p>No practice content available for this topic.</p>';
+        return;
+      }
+      
+      // Update UI with practice content
+      document.getElementById('practice-title').textContent = `Practice: ${practice.title}`;
+      document.getElementById('task-description').innerHTML = practice.description;
+      document.getElementById('hint-content').innerHTML = practice.hint;
+      document.getElementById('codeEditor').value = '// Write your solution here';
+      document.getElementById('outputContent').textContent = 'Your output will appear here...';
+      document.getElementById('hintContainer').style.display = 'none';
+      
+      // Update active button in sidebar
+      const buttons = document.querySelectorAll('.topic-button');
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.trim().startsWith(practiceId)) {
+          btn.classList.add('active');
+        }
+      });
+      
+      // Update status indicator
+      const statusIndicator = document.querySelector('.status-indicator');
+      if (solvedPractices.includes(practiceId)) {
+        statusIndicator.classList.remove('status-unsolved');
+        statusIndicator.classList.add('status-solved');
+        statusIndicator.textContent = 'Solved';
+      } else {
+        statusIndicator.classList.remove('status-solved');
+        statusIndicator.classList.add('status-unsolved');
+        statusIndicator.textContent = 'Unsolved';
+      }
+      
+      // Scroll to top of practice area
+      document.querySelector('.practice-container').scrollTop = 0;
+    }
+
+    // Function to run the code
+    function runCode() {
+      const code = document.getElementById('codeEditor').value;
+      const output = document.getElementById('outputContent');
+      const practice = practiceData[currentPractice];
+      
+      try {
+        // Capture console.log output
+        const logOutput = captureOutput(code);
+        
+        // Display output
+        output.textContent = logOutput || 'No output (did you forget console.log?)';
+        
+        // Check if solution is correct
+        if (practice && practice.test(code)) {
+          if (!solvedPractices.includes(currentPractice)) {
+            solvedPractices.push(currentPractice);
+            updateSolvedIndicators();
+            
+            const statusIndicator = document.querySelector('.status-indicator');
+            statusIndicator.classList.remove('status-unsolved');
+            statusIndicator.classList.add('status-solved');
+            statusIndicator.textContent = 'Solved';
+            
+            // Show success message
+            output.textContent += '\n\n✅ Correct solution! Well done!';
+          }
+        }
+      } catch (err) {
+        output.textContent = `Error: ${err.message}`;
+      }
+    }
+
+    // Helper function to capture console output
+    function captureOutput(code) {
+      let logOutput = '';
+      const originalLog = console.log;
+      
+      console.log = function(...args) {
+        logOutput += args.join(' ') + '\n';
+      };
+      
+      try {
+        new Function(code)();
+      } catch (err) {
+        logOutput += `Error: ${err.message}\n`;
+      }
+      
+      console.log = originalLog;
+      return logOutput;
+    }
+
+    // Helper functions
+    function showHint() {
+      document.getElementById('hintContainer').style.display = 'block';
+    }
+
+    function showSolution() {
+      const practice = practiceData[currentPractice];
+      if (practice) {
+        document.getElementById('codeEditor').value = practice.solution;
+      }
+    }
+
+    function resetCode() {
+      document.getElementById('codeEditor').value = '// Write your solution here';
+      document.getElementById('outputContent').textContent = 'Your output will appear here...';
+    }
+
+    function nextPractice() {
+      const practiceIds = Object.keys(practiceData);
+      const currentIndex = practiceIds.indexOf(currentPractice);
+      if (currentIndex < practiceIds.length - 1) {
+        loadPractice(practiceIds[currentIndex + 1]);
+        updateUrl(practiceIds[currentIndex + 1]);
+      }
+    }
+
+    function prevPractice() {
+      const practiceIds = Object.keys(practiceData);
+      const currentIndex = practiceIds.indexOf(currentPractice);
+      if (currentIndex > 0) {
+        loadPractice(practiceIds[currentIndex - 1]);
+        updateUrl(practiceIds[currentIndex - 1]);
+      }
+    }
+
+    function updateUrl(practiceId) {
+      const newUrl = new URL(window.location);
+      newUrl.searchParams.set('topic', practiceId);
+      window.history.pushState({}, '', newUrl);
+    }
+
+    function updateSolvedIndicators() {
+      const buttons = document.querySelectorAll('.topic-button');
+      buttons.forEach(btn => {
+        const practiceId = btn.textContent.trim().split(' ')[0];
+        const icon = btn.querySelector('.icon');
+        
+        if (solvedPractices.includes(practiceId)) {
+          icon.textContent = '';
+        } else {
+          icon.textContent = '';
+        }
+      });
+    }
+
+    function switchMode(mode) {
+      const lectureBtn = document.getElementById('lecture-btn');
+      const practiceBtn = document.getElementById('practice-btn');
+      
+      // Всегда обновляем состояние кнопок
+      lectureBtn.classList.toggle('active', mode === 'lecture');
+      practiceBtn.classList.toggle('active', mode === 'practice');
+      
+      // Переходим на другую страницу только если это необходимо
+      if (mode === 'lecture' && !window.location.pathname.includes('lecture')) {
+        window.location.href = `lecture.html?topic=${currentPractice}`;
+      } else if (mode === 'practice' && !window.location.pathname.includes('practice')) {
+        window.location.href = `practice.html?topic=${currentPractice}`;
+      }
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      document.getElementById('modeIcon').textContent = isLight ? '☀️' : '🌙';
+      document.getElementById('modeText').textContent = isLight ? 'Light Mode' : 'Dark Mode';
+      
+      // Save preference to localStorage
+      localStorage.setItem('themePreference', isLight ? 'light' : 'dark');
+    }
+
+    // Check for saved theme preference
+    if (localStorage.getItem('themePreference') === 'light') {
+      document.body.classList.add('light-mode');
+      document.getElementById('modeIcon').textContent = '☀️';
+      document.getElementById('modeText').textContent = 'Light Mode';
+    }
+  </script>
+</body>
+</html>

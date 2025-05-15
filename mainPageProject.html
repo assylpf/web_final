@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MainPage</title>
+  <style>
+    :root {
+      --bg-color: #1e1e1e;
+      --text-color: #f0f0f0;
+      --header-bg: #111;
+      --highlight-color: #ffd369;
+      --section-bg: #2a2a2a;
+      --input-bg: #333;
+      --list-bg: #3a3a3a;
+      --list-hover: #495057;
+      --button-bg: #22c55e;
+      --button-hover: #16a34a;
+      --link-color: #d1d1d1;
+      --heading-color: #ffd369;
+    }
+
+    body.light-mode {
+      --bg-color: #f8f9fa;
+      --text-color: #1e1e1e;
+      --header-bg: #111; /* ProgHUB background stays dark */
+      --highlight-color: #facc15;
+      --section-bg: #ffffff;
+      --input-bg: #ffffff;
+      --list-bg: #f0f8ff;
+      --list-hover: #d4f4e5;
+      --button-bg: #059669;
+      --button-hover: #047857;
+      --link-color: #333;
+      --heading-color: #000000;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      overflow-y: scroll;
+      scrollbar-width: thin;
+      scrollbar-color: #888 var(--section-bg);
+    }
+
+    body::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background-color: #22c55e;
+      border-radius: 4px;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: var(--section-bg);
+    }
+
+    .mode-toggle {
+      position: fixed;
+      top: 15px;
+      right: 290px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--section-bg);
+      color: var(--text-color);
+      padding: 8px 14px;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+
+    .toggle-switch {
+      width: 36px;
+      height: 20px;
+      background-color: #ccc;
+      border-radius: 20px;
+      position: relative;
+    }
+
+    .toggle-switch::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    body.light-mode .toggle-switch {
+      background-color: #888;
+    }
+
+    body.light-mode .toggle-switch::before {
+      left: 18px;
+    }
+
+    .toggle-icon {
+      font-size: 16px;
+    }
+
+    .header {
+      background-color: var(--header-bg);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header .left {
+      display: flex;
+      align-items: center;
+    }
+    .header .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #ffd369;
+      margin-right: 20px;
+    }
+    .header nav a {
+      color: #cccccc;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 14px;
+    }
+    .header .right {
+      display: flex;
+      align-items: center;
+    }
+    .search-box {
+      background: var(--input-bg);
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      margin-right: 15px;
+    }
+    .search-box input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-color);
+      padding: 5px;
+      width: 180px;
+    }
+    .user-profile {
+      width: 35px;
+      height: 35px;
+      border-radius: 15%;
+      overflow: hidden;
+    }
+    .user-profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .main-container {
+      display: flex;
+      max-width: 100%;
+      margin: 30px auto;
+      gap: 30px;
+    }
+    .content-container {
+      flex-grow: 1;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+    .course-title-header {
+      background: var(--section-bg);
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+    .sidebar {
+      position: static;
+      top: 10px;
+      width: 300px;
+      background: var(--section-bg);
+      padding: 20px;
+      margin-right: 5px;
+      margin-left: 100px;
+      border-radius: 8px;
+      font-size: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      overflow-y: auto;
+      color: var(--text-color);
+    }
+
+    .sidebar img {
+      display: block;
+      margin-left: 40px;
+      margin-bottom: 15px;
+    }
+    .progress-bar {
+      background: #444;
+      border-radius: 5px;
+      overflow: hidden;
+      height: 8px;
+      margin: 15px 0;
+    }
+    .progress {
+      width: 95%;
+      background: var(--button-bg);
+      height: 100%;
+      transition: width 0.3s;
+    }
+    .sidebar button {
+      background: var(--button-bg);
+      color: white;
+      padding: 10px;
+      width: 50%;
+      border: none;
+      border-radius: 5px;
+      margin: 10px 0;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+    .sidebar button:hover {
+      background-color: var(--button-hover);
+    }
+    .sidebar a {
+      display: block;
+      text-decoration: none;
+      color: var(--link-color);
+      margin: 8px 0;
+      font-size: 15px;
+    }
+    .sidebar p {
+      font-size: 14px;
+    }
+    .course-section {
+      background: var(--section-bg);
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      color: var(--text-color);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+    
+    .course-section h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--heading-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-right: 12px;
+      transition: background-color 0.3s ease;
+    }
+    .course-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .course-section ul li {
+      background: var(--list-bg);
+      padding: 12px;
+      margin: 6px 0;
+      border-radius: 6px;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+    .course-section ul li:hover {
+      background-color: var(--list-hover);
+      cursor: pointer;
+    }
+    .li-label {
+      flex: 1;
+    }
+    .li-score {
+      font-size: 13px;
+      color: #666;
+      margin-left: 10px;
+    }
+    .topic-button {
+      background: var(--list-bg);
+      color: var(--text-color);
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      margin: 6px 0;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      transition: background-color 0.3s ease;
+    }
+    .topic-button:hover {
+      background-color: var(--list-hover);
+    }
+  </style>
+</head>
+<body>
+  <button class="mode-toggle" onclick="toggleMode()">
+    <span class="toggle-icon" id="modeIcon">🌙</span>
+    <span id="modeText">Dark Mode</span>
+    <span class="toggle-switch"></span>
+  </button>
+
+  <script src="theme.js"></script>
+  <script>
+    function searchContent(query) {
+      const sections = document.querySelectorAll(".course-section");
+      query = query.toLowerCase();
+
+      sections.forEach(section => {
+        const heading = section.querySelector("h2" && "ul").textContent.toLowerCase();
+        const items = section.querySelectorAll("li");
+        let match = heading.includes(query);
+
+        items.forEach(item => {
+          const label = item.querySelector(".li-label").textContent.toLowerCase();
+          const isMatch = label.includes(query);
+          item.style.display = isMatch ? "flex" : "none";
+          if (isMatch) match = true;
+        });
+
+        section.style.display = match ? "block" : "none";
+      });
+    }
+    document.addEventListener("DOMContentLoaded", initTheme);
+  </script>
+</body>
+</html>
+
+  <header class="header">
+    <div class="left">
+      <div class="logo">ProgHUB</div>
+      <nav>
+        <a href="#">Catalog ▼</a>
+        <a href="#">Learning</a>
+        <a href="#">Teaching</a>
+      </nav>
+    </div>
+    <div class="right">
+      <div class="search-box">
+        <input type="text" placeholder="Search" oninput="searchContent(this.value)"/>
+      </div>
+      <div class="user-profile">
+        <img src="C:Users/Сулпак/Downloads/_DSC4482.JPG" alt="User" />
+      </div>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <aside class="sidebar">
+      <img src="C:\Users\Сулпак\Downloads\mona_lisa.jpg.webp" alt="Course" height="250px"/>
+      <div class="course-title"><strong>Course “JavaScript” for beginners</strong></div>
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+      <p><strong>100%</strong> of material learned</p>
+      <p><strong>325/325</strong> points scored</p>
+      <button class="sidebar" onclick="location.href='lecture.html?topic=1.1'">Learn</button>
+      <a href="#">Information</a>
+      <a href="#">Syllabus</a>
+      <a href="#">News</a>
+      <a href="#">Comments</a>
+      <a href="#">Reviews</a>
+    </aside>
+
+    <div class="content-container">
+      <div class="course-title-header">Course content</div>
+
+      <div class="course-section">
+        <form action="practicePage.html" target="_self"></form>
+          <h2>1. Introduction <span class="li-score">2/2</span></h2>
+          <ul>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=1.1'">1.1 About the course <span>50/50</span></button>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=1.2'">1.2 About JavaScript <span>50/50</span></button>
+          </ul>
+      </div>
+
+      <div class="course-section">
+        <form action="practicePage.html" target="_self"></form>
+          <h2>2. JavaScript Basics <span class="li-score">97/97</span></h2>
+          <ul>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=2.1'">2.1 Instructions and comments <span>50/50</span></button>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=2.2'">2.2 Variables <span>50/50</span></button>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=2.3'">2.3 Data types <span>50/50</span></button>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=2.4'">2.4 Input <span>50/50</span></button>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=2.5'">2.5 Mathematical operations <span>50/50</span></button>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=2.6'">2.6 Comparison operators <span>50/50</span></button>
+            <button class="topic-button" onclick="location.href='lecture.html?topic=2.7'">2.7 Logical operators <span>50/50</span></button>
+          </ul>
+      </div>
+
+      <div class="course-section">
+        <h2>3. Conditional constructions <span class="li-score">37/43</span></h2>
+        <ul>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=3.1'">3.1 if <span>12/12</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=3.2'">3.2 else and else if <span>12/14</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=3.3'">3.3 Ternary operator <span>10/10</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=3.4'">3.4 Nested conditions <span>3/7</span></button>
+        </ul>
+      </div>
+
+      <div class="course-section">
+        <h2>4. Loops <span class="li-score">24/24</span></h2>
+        <ul>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=4.1'">4.1 while <span>12/12</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=4.2'">4.2 for <span>12/12</span></button>
+        </ul>
+      </div>
+
+      <div class="course-section">
+        <h2>5. Functions <span class="li-score">97/97</span></h2>
+        <ul>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=5.1'">5.1 Introduction to functions <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=5.2'">5.2 Parameters <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=5.3'">5.3 Return value <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=5.4'">5.4 Arrow functions, functional expressions <span>50/50</span></button>
+        </ul>
+      </div>
+
+      <div class="course-section">
+        <h2>6. Objects <span class="li-score">97/97</span></h2>
+        <ul>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=6.1'">6.1 Introduction to objects <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=6.2'">6.2 Working with properties <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=6.3'">6.3 Methods of object <span>50/50</span></button>
+        </ul>
+      </div>
+
+      <div class="course-section">
+        <h2>7. Working with primitives <span class="li-score">97/97</span></h2>
+        <ul>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=7.1'">7.1 Interpolation and special characters <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=7.2'">7.2 Properties and methods of strings <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=7.3'">7.3 Row indices <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=7.4'">7.4 Working with numbers, Math <span>50/50</span></button>
+        </ul>
+      </div>
+
+      <div class="course-section">
+        <h2>8. Arrays<span class="li-score">97/97</span></h2>
+        <ul>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=8.1'">8.1 Introduction to arrays <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='plecture.html?topic=8.2'">8.2 slice, concat, split/join <span>50/50</span></button>
+          <button class="topic-button" onclick="location.href='lecture.html?topic=8.3'">8.3 map, filter, includes <span>50/50</span></button>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
