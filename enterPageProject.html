@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Enter Page</title>
+    <link rel="icon" type="image/x-icon" href="C:Users/Сулпак/Downloads/_DSC4482.JPG">
+    
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: url("file:///C:/Users/Сулпак/Downloads/99px_ru_wallpaper_334282_samuraj_jin_sakai_fan_art_iz_videoigri_ghost.jpg") no-repeat;
+            background-color: #f4f4f4;
+            background-size: cover;
+            position: relative;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Header Styling */
+        .header {
+            background-color: transparent;
+            color: #facc15;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            backdrop-filter: blur(15px);
+        }
+
+        /* Login Box Styling */
+        .login-box {
+            width: 300px;
+            margin: 130px auto;
+            padding: 20px;
+            background: transparent;
+            border-style: 1px solid #ccc;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(15px);
+        }
+
+        .login-box h2 {
+            font-size: 18px;
+            color: gray;
+            font-style: italic;
+        }
+
+        .login-box label {
+            display: block;
+            text-align: left;
+            margin: 10px 8px 2px;
+            font-weight: bold;
+            color:#c3b169;
+        }
+
+        .login-box input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            font-size: 16px;
+        }
+
+        .login-box button {
+            width: 96%;
+            padding: 10px;
+            background: rgb(192, 62, 50);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            backdrop-filter: blur(15px);
+        }
+        
+        .login-box button:hover {
+            background: green;
+        }
+
+        /* Astyngy boligi*/
+        .footer {
+            background-color: transparent;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(15px);
+        }
+
+        /* Forgot Password Link */
+        .forgot-password {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .login-to-SDU {
+            display: block;
+            margin-top: -120px;
+            margin-left: 230px;
+            font-size: 13px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+            color: rgb(216, 46, 8);
+        }
+        
+        .login-to-SDU:hover {
+            text-decoration: underline;
+            color: rgb(216, 46, 8);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- En zhogary-->
+    <div class="header">
+        ProgHUB
+    </div>
+
+    <!-- Login -->
+    <div class="login-box">
+        <h2>Welcome to ProgHUB!</h2>
+        <form action="mainPageProject.html" target="_self">
+            <label for="student-number">Student Number</label>
+            <input type="text" id="student-number" title="Fill your id number" placeholder="Enter your student number" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" title="Fill your password" placeholder="Enter your password" required>
+
+            <button type="submit">Log in</button>
+        </form>
+        
+        <a href="https://my.sdu.edu.kz/index.php?mod=settings" target="_blank" class="forgot-password">Can't access my account?</a>
+    </div>
+    <div>
+        <a href="https://www.google.com/a/sdu.edu.kz/ServiceLogin?service=mail&passive=true&rm=false&continue=https://mail.google.com/mail/&ss=1&ltmpl=default&ltmplcache=2&emr=1&osid=1#" target="_blank" class="login-to-SDU">Login to SduMail</a>
+    </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        ProgHUB © 2025
+    </div>
+
+</body>
+</html>
